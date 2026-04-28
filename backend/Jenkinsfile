@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-    IMAGE_NAME = "aravind80555/my-website-backend"
+    IMAGE_NAME = "aravind2003/my-website-backend"
     SONAR_URL = "http://localhost:9000"
   }
 
