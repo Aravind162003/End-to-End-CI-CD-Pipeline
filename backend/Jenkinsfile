@@ -26,7 +26,7 @@ pipeline {
     stage('Static Code Analysis') {
       steps {
         dir('backend') {
-          withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+          withCredentials([string(credentialsId: 'sonar123', variable: 'SONAR_AUTH_TOKEN')]) {
             sh '''
             npx sonar-scanner \
             -Dsonar.projectKey=react-exam \
