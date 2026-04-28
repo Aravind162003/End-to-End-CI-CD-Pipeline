@@ -17,29 +17,35 @@ pipeline {
 
     stage('Install Node Dependencies') {
       steps {
-        sh 'npm install'
+        dir('backend') {
+          sh 'npm install'
+        }
       }
     }
 
     stage('Static Code Analysis') {
       steps {
-        withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
-          sh '''
-          npx sonar-scanner \
-          -Dsonar.projectKey=react-exam \
-          -Dsonar.sources=. \
-          -Dsonar.host.url=$SONAR_URL \
-          -Dsonar.login=$SONAR_AUTH_TOKEN \
-          -Dsonar.exclusions=node_modules/**,build/**
-          '''
+        dir('backend') {
+          withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+            sh '''
+            npx sonar-scanner \
+            -Dsonar.projectKey=react-exam \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=$SONAR_URL \
+            -Dsonar.login=$SONAR_AUTH_TOKEN \
+            -Dsonar.exclusions=node_modules/**,build/**
+            '''
+          }
         }
       }
     }
 
     stage('Build Docker Image') {
       steps {
-        script {
-          dockerImage = docker.build("${IMAGE_NAME}:latest")
+        dir('backend') {
+          script {
+            dockerImage = docker.build("${IMAGE_NAME}:latest")
+          }
         }
       }
     }
